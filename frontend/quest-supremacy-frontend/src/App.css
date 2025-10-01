@@ -1,0 +1,583 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Cinzel:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* Tema Manhwa Dark - Quest Supremacy IRL */
+:root {
+  --radius: 0.625rem;
+  
+  /* Cores Manhwa */
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #1a1a1a;
+  --bg-card: #2a2a2a;
+  --accent-red: #b00020;
+  --accent-gold: #d4af37;
+  --accent-red-dark: #8b0000;
+  --text-primary: #f5f5f5;
+  --text-secondary: #cccccc;
+  --text-muted: #888888;
+  --border-gold: #d4af37;
+  --shadow-red: rgba(176, 0, 32, 0.3);
+  --shadow-gold: rgba(212, 175, 55, 0.3);
+  
+  /* Shadcn Variables Override */
+  --background: var(--bg-primary);
+  --foreground: var(--text-primary);
+  --card: var(--bg-card);
+  --card-foreground: var(--text-primary);
+  --popover: var(--bg-card);
+  --popover-foreground: var(--text-primary);
+  --primary: var(--accent-red);
+  --primary-foreground: var(--text-primary);
+  --secondary: var(--bg-secondary);
+  --secondary-foreground: var(--text-primary);
+  --muted: var(--bg-secondary);
+  --muted-foreground: var(--text-muted);
+  --accent: var(--accent-gold);
+  --accent-foreground: var(--bg-primary);
+  --destructive: #ef4444;
+  --border: var(--accent-red);
+  --input: var(--bg-secondary);
+  --ring: var(--accent-gold);
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Oswald', sans-serif;
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+  
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 20% 80%, var(--accent-red) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, var(--accent-gold) 0%, transparent 50%),
+      radial-gradient(circle at 40% 40%, var(--accent-red-dark) 0%, transparent 50%);
+    opacity: 0.05;
+    pointer-events: none;
+    z-index: 0;
+  }
+}
+
+/* Tipografia Manhwa */
+.manhwa-title {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.manhwa-subtitle {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.manhwa-text {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+/* Layout Principal */
+.app-container {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+}
+
+.main-content {
+  position: relative;
+  z-index: 1;
+  padding: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header Épico */
+.epic-header {
+  text-align: center;
+  padding: 2rem 0;
+  border-bottom: 2px solid var(--border-gold);
+  margin-bottom: 2rem;
+  background: linear-gradient(90deg, transparent, var(--accent-red-dark), transparent);
+  background-size: 100% 1px;
+  background-repeat: no-repeat;
+  background-position: bottom;
+}
+
+.logo-title {
+  font-size: 3rem;
+  background: linear-gradient(45deg, var(--accent-red), var(--accent-gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.8));
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.master-quote {
+  font-size: 1.2rem;
+  color: var(--accent-gold);
+  font-style: italic;
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--accent-gold);
+  border-radius: 8px;
+  background: rgba(212, 175, 55, 0.1);
+  backdrop-filter: blur(10px);
+  font-family: 'Oswald', sans-serif;
+}
+
+/* Override Shadcn Components */
+.card {
+  background: linear-gradient(135deg, var(--bg-card), var(--bg-secondary)) !important;
+  border: 2px solid var(--accent-red) !important;
+  border-radius: 12px !important;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent-red), var(--accent-gold));
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px var(--shadow-red);
+  border-color: var(--accent-gold) !important;
+}
+
+.button {
+  background: linear-gradient(135deg, var(--accent-red), var(--accent-red-dark)) !important;
+  border: 2px solid var(--accent-gold) !important;
+  color: var(--text-primary) !important;
+  font-family: 'Oswald', sans-serif !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.button:hover::before {
+  left: 100%;
+}
+
+.button:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px var(--shadow-gold) !important;
+}
+
+/* Progress Bar Override */
+.progress {
+  background: var(--bg-primary) !important;
+  border: 1px solid var(--accent-red) !important;
+  height: 12px !important;
+}
+
+.progress > div {
+  background: linear-gradient(90deg, var(--accent-red), var(--accent-gold)) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress > div::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* Badge Override */
+.badge {
+  background: linear-gradient(45deg, var(--accent-red), var(--accent-gold)) !important;
+  color: var(--text-primary) !important;
+  font-family: 'Oswald', sans-serif !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  border: 1px solid var(--accent-gold) !important;
+}
+
+/* Tabs Override */
+.tabs-list {
+  background: var(--bg-secondary) !important;
+  border: 2px solid var(--accent-red) !important;
+  border-radius: 8px !important;
+}
+
+.tabs-trigger {
+  background: transparent !important;
+  color: var(--text-secondary) !important;
+  font-family: 'Oswald', sans-serif !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  border: none !important;
+  transition: all 0.3s ease;
+}
+
+.tabs-trigger[data-state="active"] {
+  background: linear-gradient(135deg, var(--accent-red), var(--accent-red-dark)) !important;
+  color: var(--text-primary) !important;
+  border: 2px solid var(--accent-gold) !important;
+  box-shadow: 0 0 15px var(--shadow-gold) !important;
+}
+
+/* Quest Cards Específicos */
+.quest-card {
+  background: linear-gradient(135deg, var(--bg-card), var(--bg-secondary)) !important;
+  border: 2px solid var(--accent-red) !important;
+  border-radius: 12px !important;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.quest-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  background: linear-gradient(180deg, var(--accent-red), var(--accent-gold));
+  transition: width 0.3s ease;
+}
+
+.quest-card:hover::before {
+  width: 12px;
+}
+
+.quest-card.completed {
+  border-color: var(--accent-gold) !important;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), var(--bg-card)) !important;
+}
+
+.quest-card.completed::before {
+  background: var(--accent-gold) !important;
+  width: 12px;
+}
+
+/* Status Cards */
+.status-card {
+  background: linear-gradient(135deg, var(--bg-card), var(--bg-secondary)) !important;
+  border: 2px solid var(--accent-red) !important;
+  border-radius: 12px !important;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.status-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent-red), var(--accent-gold));
+}
+
+.status-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px var(--shadow-red);
+  border-color: var(--accent-gold) !important;
+}
+
+/* Conquistas */
+.achievement-card {
+  background: linear-gradient(135deg, var(--bg-card), var(--bg-secondary)) !important;
+  border: 2px solid var(--accent-gold) !important;
+  border-radius: 12px !important;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.achievement-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent-gold), var(--accent-red));
+}
+
+.achievement-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 10px 30px var(--shadow-gold);
+}
+
+.achievement-locked {
+  opacity: 0.6;
+  filter: grayscale(100%);
+  border-color: var(--text-muted) !important;
+}
+
+.achievement-locked::before {
+  background: var(--text-muted) !important;
+}
+
+/* Rarity Colors */
+.rarity-common { border-color: #9CA3AF !important; }
+.rarity-uncommon { border-color: #10B981 !important; }
+.rarity-rare { border-color: #3B82F6 !important; }
+.rarity-epic { border-color: #8B5CF6 !important; }
+.rarity-legendary { border-color: var(--accent-gold) !important; }
+
+/* Navegação */
+.nav-button {
+  background: linear-gradient(135deg, var(--bg-card), var(--bg-secondary)) !important;
+  border: 2px solid var(--accent-red) !important;
+  color: var(--text-primary) !important;
+  font-family: 'Oswald', sans-serif !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.nav-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+  transition: left 0.5s ease;
+}
+
+.nav-button:hover::before {
+  left: 100%;
+}
+
+.nav-button:hover {
+  border-color: var(--accent-gold) !important;
+  box-shadow: 0 0 20px var(--shadow-gold) !important;
+  transform: translateY(-2px) !important;
+}
+
+.nav-button.active {
+  background: linear-gradient(135deg, var(--accent-red), var(--accent-red-dark)) !important;
+  border-color: var(--accent-gold) !important;
+  box-shadow: 0 0 25px var(--shadow-red) !important;
+}
+
+/* Animações Épicas */
+@keyframes levelUp {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes questComplete {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes goldGlow {
+  0%, 100% { box-shadow: 0 0 20px var(--shadow-gold); }
+  50% { box-shadow: 0 0 40px var(--shadow-gold); }
+}
+
+@keyframes sparkle {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-100px); }
+}
+
+.level-up-animation {
+  animation: levelUp 0.6s ease-in-out;
+}
+
+.quest-complete-animation {
+  background: linear-gradient(45deg, var(--accent-gold), var(--accent-red), var(--accent-gold)) !important;
+  background-size: 200% 200%;
+  animation: questComplete 1s ease-in-out;
+}
+
+.gold-glow {
+  animation: goldGlow 2s ease-in-out infinite;
+}
+
+/* Efeitos de Partículas */
+.particle-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.particle-effect::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(2px 2px at 20px 30px, var(--accent-gold), transparent),
+    radial-gradient(2px 2px at 40px 70px, var(--accent-red), transparent),
+    radial-gradient(1px 1px at 90px 40px, var(--accent-gold), transparent);
+  background-repeat: repeat;
+  background-size: 100px 100px;
+  animation: sparkle 3s linear infinite;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* Scrollbar Personalizada */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--accent-red), var(--accent-gold));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--accent-gold), var(--accent-red));
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .logo-title {
+    font-size: 2rem;
+  }
+  
+  .main-content {
+    padding: 0.5rem;
+  }
+  
+  .epic-header {
+    padding: 1rem 0;
+  }
+}
+
+/* Utilitários */
+.text-gradient {
+  background: linear-gradient(45deg, var(--accent-red), var(--accent-gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.border-gradient {
+  border: 2px solid;
+  border-image: linear-gradient(45deg, var(--accent-red), var(--accent-gold)) 1;
+}
+
+.shadow-epic {
+  box-shadow: 0 10px 30px var(--shadow-red), 0 0 20px var(--shadow-gold);
+}
+
+/* Estados Especiais */
+.crisis-mode {
+  border-color: #ef4444 !important;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), var(--bg-card)) !important;
+}
+
+.crisis-mode::before {
+  background: #ef4444 !important;
+}
+
+/* Motivational Message */
+.motivational-message {
+  background: linear-gradient(135deg, var(--accent-gold), #f59e0b) !important;
+  color: var(--bg-primary) !important;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 15px var(--shadow-gold);
+  font-family: 'Oswald', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
