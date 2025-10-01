@@ -1,9 +1,0 @@
-{
-  "teste": {
-    "id": 1,
-    "username": "teste",
-    "email": "teste@teste.com",
-    "password": "123456",
-    "created_at": "posix.times_result(user=0.16, system=0.02, children_user=0.0, children_system=0.0, elapsed=17513496.97)"
-  }
-}
