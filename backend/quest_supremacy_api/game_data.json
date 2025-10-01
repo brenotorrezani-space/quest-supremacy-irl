@@ -1,0 +1,133 @@
+{
+  "users": {
+    "heroi_clean": {
+      "id": "5f313d45-d64c-4091-8a42-5fa2b78d985a",
+      "username": "heroi_clean",
+      "email": "heroi@clean.com",
+      "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+      "created_at": "2025-10-01T08:10:57.591229",
+      "last_login": null
+    }
+  },
+  "game_data": {
+    "heroi_clean": {
+      "stats": {
+        "strength": {
+          "level": "F",
+          "xp": 0,
+          "max_xp": 100,
+          "total_xp": 0
+        },
+        "mental_health": {
+          "level": "F",
+          "xp": 0,
+          "max_xp": 100,
+          "total_xp": 0
+        },
+        "intelligence": {
+          "level": "F",
+          "xp": 0,
+          "max_xp": 100,
+          "total_xp": 0
+        },
+        "addiction_control": {
+          "level": "F",
+          "xp": 0,
+          "max_xp": 100,
+          "total_xp": 0
+        },
+        "nutrition": {
+          "level": "F",
+          "xp": 0,
+          "max_xp": 100,
+          "total_xp": 0
+        },
+        "endurance": {
+          "level": "F",
+          "xp": 0,
+          "max_xp": 100,
+          "total_xp": 0
+        },
+        "speed": {
+          "level": "F",
+          "xp": 0,
+          "max_xp": 100,
+          "total_xp": 0
+        },
+        "charisma": {
+          "level": "F",
+          "xp": 0,
+          "max_xp": 100,
+          "total_xp": 0
+        },
+        "skills": {
+          "level": "F",
+          "xp": 0,
+          "max_xp": 100,
+          "total_xp": 0
+        },
+        "sexuality": {
+          "level": "F",
+          "xp": 0,
+          "max_xp": 100,
+          "total_xp": 0
+        }
+      },
+      "daily_quests": [
+        {
+          "id": "quest_1",
+          "title": "Ritual da Força",
+          "description": "Complete 30 minutos de exercício físico",
+          "category": "strength",
+          "xp_reward": 15,
+          "completed": false,
+          "type": "daily"
+        },
+        {
+          "id": "quest_2",
+          "title": "Meditação Mental",
+          "description": "Pratique 10 minutos de meditação ou mindfulness",
+          "category": "mental_health",
+          "xp_reward": 12,
+          "completed": false,
+          "type": "daily"
+        },
+        {
+          "id": "quest_3",
+          "title": "Aprendizado Épico",
+          "description": "Estude algo novo por 45 minutos",
+          "category": "intelligence",
+          "xp_reward": 18,
+          "completed": false,
+          "type": "daily"
+        },
+        {
+          "id": "quest_4",
+          "title": "Resistência às Trevas",
+          "description": "Evite vícios por todo o dia",
+          "category": "addiction_control",
+          "xp_reward": 20,
+          "completed": false,
+          "type": "daily"
+        },
+        {
+          "id": "quest_5",
+          "title": "Nutrição Sagrada",
+          "description": "Coma apenas alimentos saudáveis hoje",
+          "category": "nutrition",
+          "xp_reward": 16,
+          "completed": false,
+          "type": "daily"
+        }
+      ],
+      "achievements": [],
+      "level": 1,
+      "total_xp": 0,
+      "last_quest_reset": "2025-10-01T08:10:57.591253"
+    }
+  },
+  "metadata": {
+    "created_at": "2025-10-01T08:10:15.950702",
+    "version": "1.0.0"
+  }
+}
