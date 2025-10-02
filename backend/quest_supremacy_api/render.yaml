@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: quest-supremacy-api
+    env: python
+    region: oregon
+    buildCommand: cd backend/quest_supremacy_api && pip install -r requirements.txt
+    startCommand: cd backend/quest_supremacy_api && gunicorn --bind 0.0.0.0:$PORT src.main_render:app
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: SECRET_KEY
+        generateValue: true
+      - key: CORS_ORIGINS
+        value: https://quest-supremacy-irl.vercel.app,http://localhost:5173
