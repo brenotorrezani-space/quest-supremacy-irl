@@ -12,3 +12,5 @@ services:
         generateValue: true
       - key: CORS_ORIGINS
         value: https://quest-supremacy-irl.vercel.app,http://localhost:5173
+      - key: RENDER
+        value: "true"
