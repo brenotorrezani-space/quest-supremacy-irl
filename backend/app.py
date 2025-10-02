@@ -3,20 +3,20 @@
 
 """
 Quest Supremacy IRL - Backend API
-Versão corrigida para resolver erro interno do servidor
+Versão corrigida com paths dinâmicos para Render
 """
 
 import os
 import json
 import hashlib
 import uuid
-from datetime import datetime, timedelta
+from datetime import datetime
 from flask import Flask, request, jsonify, session
 from flask_cors import CORS
 
 # Configuração da aplicação
 app = Flask(__name__)
-app.secret_key = os.environ.get('SECRET_KEY', 'quest-supremacy-dev-key-2024')
+app.secret_key = os.environ.get('SECRET_KEY', 'quest-supremacy-secret-2024')
 
 # Configuração CORS
 cors_origins = os.environ.get('CORS_ORIGINS', 'https://quest-supremacy-irl.vercel.app,http://localhost:5173').split(',')
@@ -26,49 +26,90 @@ CORS(app,
      allow_headers=['Content-Type', 'Authorization'],
      methods=['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'])
 
-# Configuração do banco de dados JSON
-DATA_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'quest_data.json')
+# Configuração do banco de dados JSON com paths dinâmicos
+def get_data_file_path():
+    """Determina o caminho correto do arquivo de dados baseado no ambiente"""
+    if os.environ.get('RENDER'):
+        # No Render, usar caminho na raiz do projeto
+        return '/opt/render/project/src/quest_data.json'
+    else:
+        # Local, usar caminho relativo ao arquivo atual
+        return os.path.join(os.path.dirname(os.path.abspath(__file__)), 'quest_data.json')
+
+DATA_FILE = get_data_file_path()
+
+def ensure_data_dir():
+    """Garante que o diretório do arquivo de dados existe"""
+    try:
+        data_dir = os.path.dirname(DATA_FILE)
+        if not os.path.exists(data_dir):
+            os.makedirs(data_dir, exist_ok=True)
+            print(f"✅ Diretório criado: {data_dir}")
+        return True
+    except Exception as e:
+        print(f"❌ Erro ao criar diretório: {e}")
+        return False
 
 def init_data_file():
     """Inicializa o arquivo de dados se não existir"""
-    if not os.path.exists(DATA_FILE):
-        initial_data = {
-            "users": {},
-            "created_at": datetime.now().isoformat(),
-            "version": "1.0"
-        }
-        try:
+    try:
+        ensure_data_dir()
+        
+        if not os.path.exists(DATA_FILE):
+            initial_data = {
+                "users": {},
+                "created_at": datetime.now().isoformat(),
+                "version": "2.0-corrigida"
+            }
             with open(DATA_FILE, 'w', encoding='utf-8') as f:
                 json.dump(initial_data, f, indent=2, ensure_ascii=False)
             print(f"✅ Arquivo de dados criado: {DATA_FILE}")
-        except Exception as e:
-            print(f"❌ Erro ao criar arquivo de dados: {e}")
-    return DATA_FILE
+        else:
+            print(f"✅ Arquivo de dados existe: {DATA_FILE}")
+        return True
+    except Exception as e:
+        print(f"❌ Erro ao inicializar arquivo de dados: {e}")
+        return False
 
 def load_data():
     """Carrega dados do arquivo JSON"""
     try:
-        init_data_file()
+        if not os.path.exists(DATA_FILE):
+            if not init_data_file():
+                raise Exception("Falha ao inicializar arquivo de dados")
+        
         with open(DATA_FILE, 'r', encoding='utf-8') as f:
-            return json.load(f)
+            data = json.load(f)
+            return data
     except Exception as e:
         print(f"❌ Erro ao carregar dados: {e}")
-        return {"users": {}, "created_at": datetime.now().isoformat(), "version": "1.0"}
+        # Retornar dados padrão em caso de erro
+        return {
+            "users": {}, 
+            "created_at": datetime.now().isoformat(), 
+            "version": "2.0-corrigida"
+        }
 
 def save_data(data):
     """Salva dados no arquivo JSON"""
     try:
-        # Criar backup
-        backup_file = DATA_FILE + '.backup'
+        ensure_data_dir()
+        
+        # Criar backup se arquivo existe
         if os.path.exists(DATA_FILE):
-            with open(DATA_FILE, 'r', encoding='utf-8') as f:
-                backup_data = f.read()
-            with open(backup_file, 'w', encoding='utf-8') as f:
-                f.write(backup_data)
+            backup_file = DATA_FILE + '.backup'
+            try:
+                with open(DATA_FILE, 'r', encoding='utf-8') as f:
+                    backup_data = f.read()
+                with open(backup_file, 'w', encoding='utf-8') as f:
+                    f.write(backup_data)
+            except Exception as e:
+                print(f"⚠️ Aviso: Não foi possível criar backup: {e}")
         
         # Salvar dados
         with open(DATA_FILE, 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
+        print(f"✅ Dados salvos em: {DATA_FILE}")
         return True
     except Exception as e:
         print(f"❌ Erro ao salvar dados: {e}")
@@ -99,7 +140,7 @@ def generate_initial_stats():
 
 def generate_daily_quests():
     """Gera quests diárias"""
-    quests = [
+    return [
         {
             "id": "quest_1",
             "title": "Ritual da Força",
@@ -146,7 +187,6 @@ def generate_daily_quests():
             "type": "daily"
         }
     ]
-    return quests
 
 # Rotas da API
 
@@ -154,14 +194,18 @@ def generate_daily_quests():
 def home():
     """Página inicial da API"""
     return jsonify({
-        "message": "Quest Supremacy IRL API",
-        "version": "1.0-corrigida",
+        "message": "Quest Supremacy IRL API - Versão Corrigida",
+        "version": "2.0-corrigida",
         "status": "running",
+        "data_file": DATA_FILE,
+        "render_mode": bool(os.environ.get('RENDER')),
+        "data_file_exists": os.path.exists(DATA_FILE),
         "endpoints": [
             "/health",
             "/api/auth/register",
             "/api/auth/login", 
             "/api/auth/logout",
+            "/api/auth/check-auth",
             "/api/game/player-stats",
             "/api/game/daily-quests"
         ]
@@ -169,7 +213,7 @@ def home():
 
 @app.route('/health')
 def health():
-    """Health check"""
+    """Health check detalhado"""
     try:
         data = load_data()
         return jsonify({
@@ -177,65 +221,100 @@ def health():
             "timestamp": datetime.now().isoformat(),
             "users_count": len(data.get("users", {})),
             "data_file": DATA_FILE,
-            "version": "corrigida"
+            "data_file_exists": os.path.exists(DATA_FILE),
+            "version": "2.0-corrigida",
+            "render_mode": bool(os.environ.get('RENDER')),
+            "data_dir_exists": os.path.exists(os.path.dirname(DATA_FILE)),
+            "working_directory": os.getcwd(),
+            "python_version": f"{os.sys.version_info.major}.{os.sys.version_info.minor}.{os.sys.version_info.micro}"
         })
     except Exception as e:
         return jsonify({
             "status": "error",
             "error": str(e),
-            "timestamp": datetime.now().isoformat()
+            "timestamp": datetime.now().isoformat(),
+            "data_file": DATA_FILE,
+            "render_mode": bool(os.environ.get('RENDER'))
         }), 500
 
 @app.route('/api/test')
 def test():
     """Endpoint de teste"""
     return jsonify({
-        "message": "API funcionando!",
+        "message": "API funcionando perfeitamente!",
         "timestamp": datetime.now().isoformat(),
-        "cors_origins": cors_origins
+        "cors_origins": cors_origins,
+        "data_file": DATA_FILE,
+        "render_mode": bool(os.environ.get('RENDER')),
+        "test_status": "OK"
     })
 
 @app.route('/api/auth/register', methods=['POST'])
 def register():
-    """Registro de usuário"""
+    """Registro de usuário com logs detalhados"""
     try:
+        print("🔄 [REGISTRO] Iniciando processo de registro...")
+        print(f"📁 [REGISTRO] Arquivo de dados: {DATA_FILE}")
+        print(f"🌐 [REGISTRO] Modo Render: {bool(os.environ.get('RENDER'))}")
+        
         # Validar dados de entrada
         data = request.get_json()
         if not data:
+            print("❌ [REGISTRO] Dados não fornecidos")
             return jsonify({"error": "Dados não fornecidos"}), 400
             
         username = data.get('username', '').strip()
         email = data.get('email', '').strip()
         password = data.get('password', '')
         
+        print(f"📝 [REGISTRO] Dados recebidos: username={username}, email={email}")
+        
         # Validações básicas
         if not username or len(username) < 3:
+            print("❌ [REGISTRO] Username inválido")
             return jsonify({"error": "Nome de usuário deve ter pelo menos 3 caracteres"}), 400
             
         if not email or '@' not in email:
+            print("❌ [REGISTRO] Email inválido")
             return jsonify({"error": "Email inválido"}), 400
             
         if not password or len(password) < 6:
+            print("❌ [REGISTRO] Senha inválida")
             return jsonify({"error": "Senha deve ter pelo menos 6 caracteres"}), 400
         
+        print("✅ [REGISTRO] Validações básicas OK")
+        
         # Carregar dados existentes
+        print("🔄 [REGISTRO] Carregando dados existentes...")
         db_data = load_data()
         users = db_data.get("users", {})
+        
+        print(f"📊 [REGISTRO] Usuários existentes: {len(users)}")
         
         # Verificar se usuário já existe
         for user_id, user_data in users.items():
             if user_data.get("username") == username:
+                print(f"❌ [REGISTRO] Username já existe: {username}")
                 return jsonify({"error": "Nome de usuário já existe"}), 400
             if user_data.get("email") == email:
+                print(f"❌ [REGISTRO] Email já existe: {email}")
                 return jsonify({"error": "Email já cadastrado"}), 400
         
+        print("✅ [REGISTRO] Usuário único confirmado")
+        
         # Hash da senha
+        print("🔄 [REGISTRO] Fazendo hash da senha...")
         password_hash = hash_password(password)
         if not password_hash:
+            print("❌ [REGISTRO] Erro ao fazer hash da senha")
             return jsonify({"error": "Erro ao processar senha"}), 500
+        
+        print("✅ [REGISTRO] Hash da senha OK")
         
         # Criar novo usuário
         user_id = str(uuid.uuid4())
+        print(f"🆔 [REGISTRO] ID do usuário: {user_id}")
+        
         new_user = {
             "id": user_id,
             "username": username,
@@ -249,16 +328,24 @@ def register():
             "total_xp": 0
         }
         
+        print("✅ [REGISTRO] Dados do usuário criados")
+        
         # Salvar usuário
+        print("🔄 [REGISTRO] Salvando usuário...")
         users[user_id] = new_user
         db_data["users"] = users
         
         if not save_data(db_data):
+            print("❌ [REGISTRO] Erro ao salvar usuário")
             return jsonify({"error": "Erro ao salvar usuário"}), 500
+        
+        print("✅ [REGISTRO] Usuário salvo com sucesso")
         
         # Criar sessão
         session['user_id'] = user_id
         session['username'] = username
+        
+        print("✅ [REGISTRO] Sessão criada")
         
         # Resposta de sucesso (sem senha)
         user_response = {
@@ -268,6 +355,8 @@ def register():
             "created_at": new_user["created_at"]
         }
         
+        print("🎉 [REGISTRO] Registro concluído com sucesso!")
+        
         return jsonify({
             "message": "Usuário registrado com sucesso!",
             "success": True,
@@ -275,13 +364,22 @@ def register():
         }), 201
         
     except Exception as e:
-        print(f"❌ Erro no registro: {e}")
-        return jsonify({"error": "Erro interno do servidor"}), 500
+        print(f"❌ [REGISTRO] Erro crítico: {e}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({
+            "error": "Erro interno do servidor", 
+            "details": str(e),
+            "data_file": DATA_FILE,
+            "render_mode": bool(os.environ.get('RENDER'))
+        }), 500
 
 @app.route('/api/auth/login', methods=['POST'])
 def login():
     """Login de usuário"""
     try:
+        print("🔄 [LOGIN] Iniciando processo de login...")
+        
         data = request.get_json()
         if not data:
             return jsonify({"error": "Dados não fornecidos"}), 400
@@ -291,6 +389,8 @@ def login():
         
         if not username or not password:
             return jsonify({"error": "Username e senha são obrigatórios"}), 400
+        
+        print(f"📝 [LOGIN] Tentativa de login: {username}")
         
         # Carregar dados
         db_data = load_data()
@@ -304,6 +404,7 @@ def login():
                 break
         
         if not user_found:
+            print(f"❌ [LOGIN] Usuário não encontrado: {username}")
             return jsonify({"error": "Usuário não encontrado"}), 401
         
         user_id, user_data = user_found
@@ -311,11 +412,14 @@ def login():
         # Verificar senha
         password_hash = hash_password(password)
         if password_hash != user_data.get("password_hash"):
+            print(f"❌ [LOGIN] Senha incorreta para: {username}")
             return jsonify({"error": "Senha incorreta"}), 401
         
         # Criar sessão
         session['user_id'] = user_id
         session['username'] = username
+        
+        print(f"✅ [LOGIN] Login realizado com sucesso: {username}")
         
         # Resposta de sucesso
         user_response = {
@@ -331,20 +435,22 @@ def login():
         })
         
     except Exception as e:
-        print(f"❌ Erro no login: {e}")
+        print(f"❌ [LOGIN] Erro: {e}")
         return jsonify({"error": "Erro interno do servidor"}), 500
 
 @app.route('/api/auth/logout', methods=['POST'])
 def logout():
     """Logout de usuário"""
     try:
+        username = session.get('username', 'Desconhecido')
         session.clear()
+        print(f"✅ [LOGOUT] Logout realizado: {username}")
         return jsonify({
             "message": "Logout realizado com sucesso!",
             "success": True
         })
     except Exception as e:
-        print(f"❌ Erro no logout: {e}")
+        print(f"❌ [LOGOUT] Erro: {e}")
         return jsonify({"error": "Erro interno do servidor"}), 500
 
 @app.route('/api/auth/check-auth')
@@ -376,7 +482,7 @@ def check_auth():
         })
         
     except Exception as e:
-        print(f"❌ Erro na verificação de auth: {e}")
+        print(f"❌ [AUTH_CHECK] Erro: {e}")
         return jsonify({"error": "Erro interno do servidor"}), 500
 
 @app.route('/api/game/player-stats')
@@ -401,7 +507,7 @@ def get_player_stats():
         })
         
     except Exception as e:
-        print(f"❌ Erro ao obter stats: {e}")
+        print(f"❌ [PLAYER_STATS] Erro: {e}")
         return jsonify({"error": "Erro interno do servidor"}), 500
 
 @app.route('/api/game/daily-quests')
@@ -424,26 +530,31 @@ def get_daily_quests():
         })
         
     except Exception as e:
-        print(f"❌ Erro ao obter quests: {e}")
+        print(f"❌ [DAILY_QUESTS] Erro: {e}")
         return jsonify({"error": "Erro interno do servidor"}), 500
 
 # Inicialização
 if __name__ == '__main__':
     print("🚀 QUEST SUPREMACY IRL - VERSÃO CORRIGIDA")
-    print("=" * 60)
-    print("✅ ZERO SQLAlchemy - apenas Flask puro")
-    print("✅ ZERO conflitos - dependências mínimas")
-    print("✅ ZERO problemas - testado e funcionando")
-    print("✅ Funciona LOCAL e RENDER")
-    print("✅ Erro interno do servidor CORRIGIDO")
-    print("=" * 60)
+    print("=" * 70)
+    print("✅ Paths dinâmicos - Render/Local")
+    print("✅ Logs super detalhados")
+    print("✅ Tratamento robusto de erros")
+    print("✅ Inicialização automática")
+    print("=" * 70)
     print(f"📁 Arquivo de dados: {DATA_FILE}")
+    print(f"🌐 Modo Render: {bool(os.environ.get('RENDER'))}")
+    print(f"📂 Diretório atual: {os.getcwd()}")
     print("🚀 Iniciando servidor...")
     print("💡 Use Ctrl+C para parar")
-    print("=" * 60)
+    print("=" * 70)
     
     # Inicializar arquivo de dados
-    init_data_file()
+    init_success = init_data_file()
+    if init_success:
+        print("✅ Inicialização do banco de dados OK")
+    else:
+        print("⚠️ Problema na inicialização do banco, mas continuando...")
     
     # Configuração para desenvolvimento/produção
     debug_mode = os.environ.get('FLASK_ENV') != 'production'
