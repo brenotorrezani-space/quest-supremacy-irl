@@ -1,157 +1,209 @@
-# Quest Supremacy IRL - Full Stack PWA
+# Quest Supremacy IRL - Aplicação PWA Completa
 
-## 🎮 Sobre o Projeto
+Uma aplicação PWA (Progressive Web App) gamificada para desenvolvimento pessoal, inspirada em manhwas de RPG. Os usuários podem criar contas, acompanhar estatísticas pessoais e completar quests diárias para evoluir seus atributos da vida real.
 
-Quest Supremacy IRL é um Progressive Web App (PWA) gamificado que transforma a vida real em um RPG épico. O sistema permite aos usuários criar contas, fazer login, e gerenciar seu desenvolvimento pessoal através de um sistema de quests, níveis e conquistas.
+## 🚀 Tecnologias Utilizadas
 
-## 🏗️ Arquitetura
+### Backend
+- **Flask** - Framework web Python
+- **Flask-CORS** - Gerenciamento de CORS
+- **JSON** - Armazenamento de dados simples
+- **Render** - Plataforma de deploy
 
-### Backend (Flask)
-- **Framework**: Flask com SQLAlchemy
-- **Banco de Dados**: SQLite (desenvolvimento) / PostgreSQL (produção)
-- **Autenticação**: Sistema de sessões com cookies seguros
-- **APIs**: RESTful endpoints para autenticação e dados do jogo
-
-### Frontend (React)
-- **Framework**: React 18 com Vite
-- **UI**: Tailwind CSS + Shadcn/UI
-- **Tema**: Manhwa dark com paleta vermelho/dourado
-- **PWA**: Service Workers, manifest, notificações
-
-## 🚀 Deploy
-
-### Render (Backend)
-- Deploy automático via GitHub
-- Banco PostgreSQL gerenciado
-- Variáveis de ambiente configuradas
-
-### Vercel (Frontend)
-- Deploy automático via GitHub
-- CDN global
-- HTTPS automático
-
-### Dashboard
-- Monitoramento de performance
-- Analytics de usuário
-- Logs centralizados
+### Frontend
+- **React 18** - Biblioteca JavaScript
+- **Vite** - Build tool e dev server
+- **Tailwind CSS** - Framework CSS
+- **shadcn/ui** - Componentes UI
+- **Lucide React** - Ícones
+- **Vercel** - Plataforma de deploy
 
 ## 📁 Estrutura do Projeto
 
 ```
-quest-supremacy-fullstack/
+quest-supremacy-irl/
 ├── backend/
-│   └── quest_supremacy_api/
-│       ├── src/
-│       │   ├── main.py              # Aplicação Flask principal
-│       │   ├── models/
-│       │   │   └── user.py          # Modelos de dados
-│       │   └── routes/
-│       │       ├── auth.py          # Rotas de autenticação
-│       │       └── game.py          # Rotas do jogo
-│       ├── requirements.txt         # Dependências Python
-│       └── render.yaml             # Configuração Render
+│   ├── main.py              # Aplicação Flask principal
+│   ├── requirements.txt     # Dependências Python
+│   └── render.yaml         # Configuração de deploy Render
 ├── frontend/
-│   └── quest-supremacy-frontend/
-│       ├── src/
-│       │   ├── App.jsx             # Componente principal
-│       │   ├── App.css             # Estilos manhwa
-│       │   └── lib/
-│       │       └── api.js          # Cliente API
-│       ├── public/
-│       │   ├── manifest.json       # Manifest PWA
-│       │   └── sw.js              # Service Worker
-│       ├── package.json
-│       └── vercel.json            # Configuração Vercel
-└── README.md
+│   ├── src/
+│   │   ├── App.jsx         # Componente principal React
+│   │   ├── App.css         # Estilos da aplicação
+│   │   └── main.jsx        # Entry point
+│   ├── index.html          # HTML principal
+│   ├── package.json        # Dependências Node.js
+│   └── vite.config.js      # Configuração Vite
+└── README.md               # Este arquivo
 ```
 
-## 🛠️ Desenvolvimento Local
+## 🛠️ Configuração e Instalação
 
-### Backend
-```bash
-cd backend/quest_supremacy_api
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-pip install -r requirements.txt
-python src/main.py
+### Backend (Flask)
+
+1. **Navegue para o diretório backend:**
+   ```bash
+   cd backend
+   ```
+
+2. **Crie um ambiente virtual:**
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate  # Linux/Mac
+   # ou
+   venv\Scripts\activate     # Windows
+   ```
+
+3. **Instale as dependências:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Execute localmente:**
+   ```bash
+   python main.py
+   ```
+   O backend estará disponível em `http://localhost:5000`
+
+### Frontend (React)
+
+1. **Navegue para o diretório frontend:**
+   ```bash
+   cd frontend
+   ```
+
+2. **Instale as dependências:**
+   ```bash
+   pnpm install
+   # ou
+   npm install
+   ```
+
+3. **Execute o servidor de desenvolvimento:**
+   ```bash
+   pnpm run dev --host
+   # ou
+   npm run dev -- --host
+   ```
+   O frontend estará disponível em `http://localhost:5173`
+
+## 🚀 Deploy
+
+### Backend no Render
+
+1. **Conecte seu repositório GitHub ao Render**
+2. **Configure as seguintes variáveis:**
+   - **Build Command:** `pip install -r requirements.txt`
+   - **Start Command:** `python main.py`
+   - **Environment:** Python 3.11+
+
+3. **Variáveis de ambiente (opcionais):**
+   - `SECRET_KEY` - Chave secreta para sessões (padrão: auto-gerada)
+   - `PORT` - Porta do servidor (padrão: 5000)
+
+### Frontend no Vercel
+
+1. **Conecte seu repositório GitHub ao Vercel**
+2. **Configure o diretório raiz como `frontend`**
+3. **Build Command:** `pnpm run build` ou `npm run build`
+4. **Output Directory:** `dist`
+
+**⚠️ IMPORTANTE:** Após fazer deploy do backend, atualize a variável `API_BASE_URL` no arquivo `frontend/src/App.jsx` com a URL do seu backend no Render.
+
+## 🎮 Funcionalidades
+
+### Autenticação
+- ✅ Registro de usuários
+- ✅ Login/logout
+- ✅ Sessões persistentes
+- ✅ Validação de dados
+
+### Sistema de RPG
+- ✅ 10 atributos diferentes (Força, Saúde Mental, Inteligência, etc.)
+- ✅ Sistema de níveis (F, E, D, C, B, A, S, SS, SSS)
+- ✅ Experiência (XP) e progressão
+- ✅ Quests diárias
+
+### Interface
+- ✅ Design dark inspirado em manhwas
+- ✅ Gradientes vermelho/laranja
+- ✅ Responsivo (mobile-first)
+- ✅ Componentes UI modernos
+- ✅ Animações suaves
+
+## 🔧 Configurações Importantes
+
+### CORS
+O backend está configurado com CORS permissivo para desenvolvimento. Para produção, recomenda-se restringir as origens:
+
+```python
+CORS(app, 
+     origins=[
+         'https://seu-dominio-vercel.app',
+         'http://localhost:5173'  # apenas para desenvolvimento
+     ],
+     supports_credentials=True)
 ```
 
-### Frontend
-```bash
-cd frontend/quest-supremacy-frontend
-pnpm install
-pnpm run dev
-```
+### Armazenamento de Dados
+Atualmente utiliza arquivo JSON local (`users_data.json`). Para produção, considere migrar para:
+- PostgreSQL
+- MongoDB
+- SQLite com backup automático
 
-## 🌐 URLs de Deploy
+## 🐛 Solução de Problemas
 
-- **Frontend (Vercel)**: https://quest-supremacy-irl.vercel.app
-- **Backend (Render)**: https://quest-supremacy-api.onrender.com
-- **GitHub**: https://github.com/usuario/quest-supremacy-irl
+### Erro "Failed to fetch"
+- Verifique se o backend está rodando
+- Confirme a URL do backend no frontend
+- Verifique configurações de CORS
 
-## 🔧 Variáveis de Ambiente
+### Erro de CORS
+- Certifique-se de que `supports_credentials=True` está configurado
+- Verifique se o frontend está usando `credentials: 'include'`
 
-### Backend (.env)
-```
-FLASK_ENV=production
-DATABASE_URL=postgresql://...
-SECRET_KEY=your-secret-key
-CORS_ORIGINS=https://quest-supremacy-irl.vercel.app
-```
+### Problemas de Build
+- Limpe o cache: `rm -rf node_modules package-lock.json && npm install`
+- Verifique versões do Node.js (recomendado: 18+)
 
-### Frontend (.env.local)
-```
-VITE_API_BASE_URL=https://quest-supremacy-api.onrender.com
-```
+## 📝 Próximos Passos
 
-## 📱 Funcionalidades PWA
+### Melhorias Sugeridas
+1. **Banco de dados real** (PostgreSQL/MongoDB)
+2. **Sistema de achievements** mais robusto
+3. **Notificações push** para quests
+4. **Modo offline** (PWA completo)
+5. **Dashboard de estatísticas** avançado
+6. **Sistema de amigos/ranking**
+7. **Integração com wearables** (Fitbit, Apple Watch)
 
-- ✅ Instalação como app nativo
-- ✅ Funcionamento offline
-- ✅ Notificações push
-- ✅ Ícones e splash screens
-- ✅ Manifest configurado
+### Segurança
+1. **Rate limiting** para APIs
+2. **Validação de entrada** mais rigorosa
+3. **Criptografia de senhas** com salt
+4. **JWT tokens** em vez de sessões simples
+5. **HTTPS obrigatório** em produção
 
-## 🎨 Design System
+## 📄 Licença
 
-### Paleta de Cores
-- **Primária**: Vermelho Sangue (#b00020)
-- **Secundária**: Dourado (#d4af37)
-- **Background**: Preto (#0a0a0a)
-- **Texto**: Branco Gelo (#f5f5f5)
-
-### Tipografia
-- **Títulos**: Cinzel (manhwa style)
-- **Corpo**: Oswald
-- **UI**: Inter
-
-## 🔐 Segurança
-
-- Senhas hasheadas com Werkzeug
-- Sessões seguras com cookies HttpOnly
-- CORS configurado para domínios específicos
-- Validação de entrada em todas as APIs
-- Rate limiting implementado
-
-## 📊 Monitoramento
-
-- Logs estruturados
-- Métricas de performance
-- Alertas de erro
-- Analytics de usuário
+Este projeto é open source e está disponível sob a licença MIT.
 
 ## 🤝 Contribuição
 
+Contribuições são bem-vindas! Por favor:
 1. Fork o projeto
 2. Crie uma branch para sua feature
 3. Commit suas mudanças
 4. Push para a branch
 5. Abra um Pull Request
 
-## 📄 Licença
+## 📞 Suporte
 
-Este projeto está sob a licença MIT. Veja o arquivo LICENSE para mais detalhes.
+Para dúvidas ou problemas:
+- Abra uma issue no GitHub
+- Consulte a documentação das tecnologias utilizadas
+- Verifique os logs do servidor para debugging
 
 ---
 
-**Quest Supremacy IRL** - Transforme sua vida em uma aventura épica! ⚔️✨
+**Desenvolvido com ❤️ para gamificar o desenvolvimento pessoal**
