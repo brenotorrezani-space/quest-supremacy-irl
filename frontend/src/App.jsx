@@ -7,7 +7,8 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, Sword, Shield, Zap } from 'lucide-react';
 import './App.css';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+// URL do backend deployado
+const API_BASE_URL = 'https://0vhlizcgqgwy.manus.space';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -160,11 +161,11 @@ function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-12 h-12 text-red-600 animate-spin mx-auto mb-4" />
-          <h2 className="text-xl font-bold mb-2">Carregando Quest Supremacy IRL</h2>
-          <p className="text-muted-foreground">Preparando sua jornada épica...</p>
+          <h2 className="text-xl font-bold mb-2 text-white">Carregando Quest Supremacy IRL</h2>
+          <p className="text-gray-400">Preparando sua jornada épica...</p>
         </div>
       </div>
     );
@@ -173,14 +174,14 @@ function App() {
   // Dashboard do jogo
   if (user && gameData) {
     return (
-      <div className="min-h-screen bg-background p-4">
+      <div className="min-h-screen bg-black text-white p-4">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold mb-2 manhwa-title text-gradient">
+            <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-red-600 to-yellow-600 bg-clip-text text-transparent">
               Quest Supremacy IRL
             </h1>
-            <p className="text-muted-foreground manhwa-subtitle">
+            <p className="text-gray-400">
               ⚔️ Bem-vindo, {user.username}! Sua jornada épica continua...
             </p>
             <Button onClick={handleLogout} variant="outline" className="mt-4">
@@ -191,9 +192,9 @@ function App() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Status do Jogador */}
             <div className="lg:col-span-2">
-              <Card className="status-card">
+              <Card className="bg-gray-900 border-gray-700">
                 <CardHeader>
-                  <CardTitle className="manhwa-subtitle flex items-center gap-2">
+                  <CardTitle className="flex items-center gap-2 text-white">
                     <Shield className="w-5 h-5" />
                     Status do Herói
                   </CardTitle>
@@ -201,12 +202,12 @@ function App() {
                 <CardContent>
                   <div className="grid grid-cols-2 gap-4">
                     {Object.entries(gameData.stats).map(([key, stat]) => (
-                      <div key={key} className="stat-card p-4 rounded-lg border">
+                      <div key={key} className="bg-gray-800 p-4 rounded-lg border border-gray-600">
                         <div className="flex justify-between items-center mb-2">
-                          <span className="font-medium capitalize">
+                          <span className="font-medium capitalize text-white">
                             {key.replace('_', ' ')}
                           </span>
-                          <span className="text-sm font-bold text-gradient">
+                          <span className="text-sm font-bold bg-gradient-to-r from-red-600 to-yellow-600 bg-clip-text text-transparent">
                             {stat.level}
                           </span>
                         </div>
@@ -216,7 +217,7 @@ function App() {
                             style={{ width: `${(stat.xp / stat.max_xp) * 100}%` }}
                           />
                         </div>
-                        <div className="text-xs text-muted-foreground mt-1">
+                        <div className="text-xs text-gray-400 mt-1">
                           {stat.xp} / {stat.max_xp} XP
                         </div>
                       </div>
@@ -228,13 +229,13 @@ function App() {
 
             {/* Quests Diárias */}
             <div>
-              <Card className="status-card">
+              <Card className="bg-gray-900 border-gray-700">
                 <CardHeader>
-                  <CardTitle className="manhwa-subtitle flex items-center gap-2">
+                  <CardTitle className="flex items-center gap-2 text-white">
                     <Sword className="w-5 h-5" />
                     Quests do Dia
                   </CardTitle>
-                  <CardDescription className="manhwa-text">
+                  <CardDescription className="text-gray-400">
                     Complete suas missões diárias
                   </CardDescription>
                 </CardHeader>
@@ -243,24 +244,24 @@ function App() {
                     {gameData.quests.map((quest) => (
                       <div 
                         key={quest.id} 
-                        className={`quest-card p-3 rounded-lg border ${
-                          quest.completed ? 'bg-green-900/20 border-green-600' : 'bg-gray-800/50'
+                        className={`p-3 rounded-lg border ${
+                          quest.completed ? 'bg-green-900/20 border-green-600' : 'bg-gray-800/50 border-gray-600'
                         }`}
                       >
                         <div className="flex justify-between items-start mb-2">
-                          <h4 className="font-medium text-sm">{quest.title}</h4>
-                          <span className="text-xs text-gradient">
+                          <h4 className="font-medium text-sm text-white">{quest.title}</h4>
+                          <span className="text-xs bg-gradient-to-r from-red-600 to-yellow-600 bg-clip-text text-transparent">
                             +{quest.xp_reward} XP
                           </span>
                         </div>
-                        <p className="text-xs text-muted-foreground mb-3">
+                        <p className="text-xs text-gray-400 mb-3">
                           {quest.description}
                         </p>
                         {!quest.completed ? (
                           <Button
                             size="sm"
                             onClick={() => completeQuest(quest.id)}
-                            className="w-full nav-button"
+                            className="w-full bg-gradient-to-r from-red-600 to-yellow-600 hover:from-red-700 hover:to-yellow-700"
                           >
                             Completar
                           </Button>
@@ -279,7 +280,7 @@ function App() {
 
           {/* Frase motivacional */}
           <div className="text-center mt-8">
-            <p className="text-sm text-muted-foreground manhwa-text italic">
+            <p className="text-sm text-gray-400 italic">
               "⚔️ Cada quest completada te aproxima da supremacia absoluta..."
             </p>
           </div>
@@ -290,7 +291,7 @@ function App() {
 
   // Tela de login/registro
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
+    <div className="min-h-screen flex items-center justify-center bg-black p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="flex items-center justify-center mb-4">
@@ -298,20 +299,20 @@ function App() {
               <Sword className="w-8 h-8 text-white" />
             </div>
           </div>
-          <h1 className="text-3xl font-bold manhwa-title text-gradient">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-red-600 to-yellow-600 bg-clip-text text-transparent">
             Quest Supremacy IRL
           </h1>
-          <p className="text-muted-foreground manhwa-subtitle mt-2">
+          <p className="text-gray-400 mt-2">
             {authMode === 'login' ? 'Entre na sua jornada épica' : 'Inicie sua jornada épica'}
           </p>
         </div>
 
-        <Card className="status-card">
+        <Card className="bg-gray-900 border-gray-700">
           <CardHeader className="text-center">
-            <CardTitle className="manhwa-subtitle">
+            <CardTitle className="text-white">
               {authMode === 'login' ? 'Acesso ao Reino' : 'Criar Conta'}
             </CardTitle>
-            <CardDescription className="manhwa-text">
+            <CardDescription className="text-gray-400">
               {authMode === 'login' 
                 ? 'Digite suas credenciais para continuar sua saga'
                 : 'Registre-se para começar sua saga de desenvolvimento pessoal'
@@ -328,7 +329,7 @@ function App() {
               )}
               
               <div className="space-y-2">
-                <Label htmlFor="username" className="manhwa-subtitle">
+                <Label htmlFor="username" className="text-white">
                   Nome de Usuário
                 </Label>
                 <Input
@@ -338,14 +339,14 @@ function App() {
                   value={formData.username}
                   onChange={handleChange}
                   placeholder={authMode === 'login' ? 'Digite seu username' : 'Escolha seu nome de herói'}
-                  className="manhwa-text"
+                  className="bg-gray-800 border-gray-600 text-white"
                   disabled={loading}
                 />
               </div>
               
               {authMode === 'register' && (
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="manhwa-subtitle">
+                  <Label htmlFor="email" className="text-white">
                     Email
                   </Label>
                   <Input
@@ -355,14 +356,14 @@ function App() {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="seu.email@exemplo.com"
-                    className="manhwa-text"
+                    className="bg-gray-800 border-gray-600 text-white"
                     disabled={loading}
                   />
                 </div>
               )}
               
               <div className="space-y-2">
-                <Label htmlFor="password" className="manhwa-subtitle">
+                <Label htmlFor="password" className="text-white">
                   Senha
                 </Label>
                 <Input
@@ -372,14 +373,14 @@ function App() {
                   value={formData.password}
                   onChange={handleChange}
                   placeholder={authMode === 'login' ? 'Digite sua senha' : 'Crie uma senha forte'}
-                  className="manhwa-text"
+                  className="bg-gray-800 border-gray-600 text-white"
                   disabled={loading}
                 />
               </div>
               
               {authMode === 'register' && (
                 <div className="space-y-2">
-                  <Label htmlFor="confirmPassword" className="manhwa-subtitle">
+                  <Label htmlFor="confirmPassword" className="text-white">
                     Confirmar Senha
                   </Label>
                   <Input
@@ -389,7 +390,7 @@ function App() {
                     value={formData.confirmPassword}
                     onChange={handleChange}
                     placeholder="Confirme sua senha"
-                    className="manhwa-text"
+                    className="bg-gray-800 border-gray-600 text-white"
                     disabled={loading}
                   />
                 </div>
@@ -397,7 +398,7 @@ function App() {
               
               <Button
                 type="submit"
-                className="w-full nav-button manhwa-subtitle"
+                className="w-full bg-gradient-to-r from-red-600 to-yellow-600 hover:from-red-700 hover:to-yellow-700"
                 disabled={loading}
               >
                 {loading ? (
@@ -412,11 +413,11 @@ function App() {
             </form>
             
             <div className="mt-6 text-center">
-              <p className="text-sm text-muted-foreground manhwa-text">
+              <p className="text-sm text-gray-400">
                 {authMode === 'login' ? 'Não possui uma conta?' : 'Já possui uma conta?'}{' '}
                 <Button
                   variant="link"
-                  className="p-0 h-auto font-semibold text-gradient"
+                  className="p-0 h-auto font-semibold bg-gradient-to-r from-red-600 to-yellow-600 bg-clip-text text-transparent"
                   onClick={() => setAuthMode(authMode === 'login' ? 'register' : 'login')}
                   disabled={loading}
                 >
@@ -428,7 +429,7 @@ function App() {
         </Card>
         
         <div className="mt-6 text-center">
-          <p className="text-sm text-muted-foreground manhwa-text italic">
+          <p className="text-sm text-gray-400 italic">
             "⚔️ {authMode === 'login' 
               ? 'Todo herói precisa começar sua jornada em algum lugar...' 
               : 'Toda lenda começa com um primeiro passo corajoso...'}"
