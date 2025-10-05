@@ -1,7 +1,7 @@
 // Configurações da aplicação Quest Supremacy IRL
 
 // URL do backend - ATUALIZE ESTA URL APÓS FAZER DEPLOY DO BACKEND
-export const API_BASE_URL = 'https://0vhlizcgqgwy.manus.space';
+export const API_BASE_URL = 'https://quest-supremacy-api.onrender.com';
 
 // Configurações de desenvolvimento
 export const DEV_CONFIG = {
