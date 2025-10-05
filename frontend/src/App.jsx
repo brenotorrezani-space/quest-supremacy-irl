@@ -8,7 +8,7 @@ import { Loader2, Sword, Shield, Zap } from 'lucide-react';
 import './App.css';
 
 // URL do backend deployado
-const API_BASE_URL = 'https://0vhlizcgqgwy.manus.space';
+const API_BASE_URL = 'https://quest-supremacy-api.onrender.com';
 
 function App() {
   const [user, setUser] = useState(null);
