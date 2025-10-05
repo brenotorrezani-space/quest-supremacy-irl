@@ -3,6 +3,10 @@
 // URL do backend - ATUALIZE ESTA URL APÓS FAZER DEPLOY DO BACKEND
 export const API_BASE_URL = 'https://quest-supremacy-api.onrender.com';
 
+export const getApiUrl = ( ) => {
+  return API_BASE_URL;
+};
+
 // Configurações de desenvolvimento
 export const DEV_CONFIG = {
   // URL local do backend para desenvolvimento
